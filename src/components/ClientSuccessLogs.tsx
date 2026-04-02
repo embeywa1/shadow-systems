@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { ChevronLeft, ChevronRight } from "lucide-react";
+import { supabase } from "@/integrations/supabase/client";
 
 const PLACEHOLDER_REVIEWS = [
   {
@@ -25,10 +26,27 @@ interface Review {
   text: string;
 }
 
-const ClientSuccessLogs = ({ reviews }: { reviews?: Review[] }) => {
-  const displayReviews = reviews && reviews.length > 0 ? reviews : PLACEHOLDER_REVIEWS;
+const ClientSuccessLogs = () => {
+  const [reviews, setReviews] = useState<Review[]>([]);
   const [current, setCurrent] = useState(0);
   const [isAnimating, setIsAnimating] = useState(false);
+
+  useEffect(() => {
+    const fetchReviews = async () => {
+      const { data } = await supabase
+        .from("reviews")
+        .select("name, company, review_text")
+        .eq("is_published", true)
+        .order("created_at", { ascending: false });
+
+      if (data && data.length > 0) {
+        setReviews(data.map(r => ({ name: r.name, company: r.company, text: r.review_text })));
+      }
+    };
+    fetchReviews();
+  }, []);
+
+  const displayReviews = reviews.length > 0 ? reviews : PLACEHOLDER_REVIEWS;
 
   const navigate = (dir: number) => {
     if (isAnimating) return;
