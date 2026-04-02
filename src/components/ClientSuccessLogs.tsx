@@ -38,8 +38,8 @@ const ClientSuccessLogs = () => {
         .select("name, company, review_text")
         .order("created_at", { ascending: false });
 
-      if (data && data.length > 0) {
-        setReviews(data.map(r => ({ name: r.name, company: r.company, text: r.review_text })));
+      if (data && (data as any[]).length > 0) {
+        setReviews((data as any[]).map((r: any) => ({ name: r.name, company: r.company, text: r.review_text })));
       }
     };
     fetchReviews();
