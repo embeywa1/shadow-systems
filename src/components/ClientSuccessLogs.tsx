@@ -34,13 +34,12 @@ const ClientSuccessLogs = () => {
   useEffect(() => {
     const fetchReviews = async () => {
       const { data } = await supabase
-        .from("reviews")
+        .from("published_reviews" as any)
         .select("name, company, review_text")
-        .eq("is_published", true)
         .order("created_at", { ascending: false });
 
-      if (data && data.length > 0) {
-        setReviews(data.map(r => ({ name: r.name, company: r.company, text: r.review_text })));
+      if (data && (data as any[]).length > 0) {
+        setReviews((data as any[]).map((r: any) => ({ name: r.name, company: r.company, text: r.review_text })));
       }
     };
     fetchReviews();
