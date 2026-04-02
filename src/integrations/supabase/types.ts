@@ -55,7 +55,42 @@ export type Database = {
       }
     }
     Views: {
-      [_ in never]: never
+      published_reviews: {
+        Row: {
+          city: string | null
+          company: string | null
+          country: string | null
+          created_at: string | null
+          id: string | null
+          is_published: boolean | null
+          name: string | null
+          review_text: string | null
+          sentiment: string | null
+        }
+        Insert: {
+          city?: string | null
+          company?: string | null
+          country?: string | null
+          created_at?: string | null
+          id?: string | null
+          is_published?: boolean | null
+          name?: string | null
+          review_text?: string | null
+          sentiment?: string | null
+        }
+        Update: {
+          city?: string | null
+          company?: string | null
+          country?: string | null
+          created_at?: string | null
+          id?: string | null
+          is_published?: boolean | null
+          name?: string | null
+          review_text?: string | null
+          sentiment?: string | null
+        }
+        Relationships: []
+      }
     }
     Functions: {
       [_ in never]: never
