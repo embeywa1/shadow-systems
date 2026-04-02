@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
+import { supabase } from "@/integrations/supabase/client";
 
 const DeploymentRequestForm = () => {
   const [formData, setFormData] = useState({ name: "", company: "", review: "" });
@@ -13,8 +14,16 @@ const DeploymentRequestForm = () => {
     setStatus("submitting");
 
     try {
-      // TODO: Connect to edge function once backend is set up
-      await new Promise(resolve => setTimeout(resolve, 1000));
+      const { error } = await supabase.functions.invoke("submit-review", {
+        body: {
+          name: formData.name.trim(),
+          company: formData.company.trim(),
+          review_text: formData.review.trim(),
+        },
+      });
+
+      if (error) throw error;
+
       setStatus("success");
       setFormData({ name: "", company: "", review: "" });
       setTimeout(() => setStatus("idle"), 3000);
