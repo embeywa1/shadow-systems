@@ -34,9 +34,8 @@ const ClientSuccessLogs = () => {
   useEffect(() => {
     const fetchReviews = async () => {
       const { data } = await supabase
-        .from("reviews")
+        .from("published_reviews" as any)
         .select("name, company, review_text")
-        .eq("is_published", true)
         .order("created_at", { ascending: false });
 
       if (data && data.length > 0) {
